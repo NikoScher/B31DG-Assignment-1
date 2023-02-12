@@ -22,7 +22,8 @@
 #define PBGAP  2500 // e = 5: 5 * 500us
 #define MODE   2    // r = 9: rem(9 / 4) + 1
 
-#define DMOD   1000 // Debug modifier: Multiplies whole signal by constant
+#define SIGBWIDTH 50   // Width of pulse of Signal B in us
+#define DMOD      1000 // Debug modifier: Multiplies whole signal by constant
 
 // Includes for debugging
 //#include <stdio.h>
@@ -33,7 +34,7 @@ typedef unsigned char uint8;
 typedef unsigned int uint16;
 
 // Function prototypes to generate signal A & B
-void genSigA(uint16 pWidth, uint16 pSpace, uint8 pNum, uint16 pbGap, uint8 mode);
-void genSigB(uint16 pWidth);
+void genSigA(uint16 pWidth, uint16 pSpace, uint8 pNum, uint16 pbGap, uint8 mode, bool debug);
+void genSigB(uint16 pWidth, bool debug);
 
 #endif  // __WAVEGEN_H__
