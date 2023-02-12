@@ -1,4 +1,4 @@
-# VS code & Arduino configs
+# VS code & Arduino configs/debug
 *.json
 *.cfg
 *.svd
