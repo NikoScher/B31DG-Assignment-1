@@ -23,7 +23,16 @@ void genSigA(uint16 pWidth, uint16 pSpace, uint8 pNum, uint16 pbGap, uint8 mode,
 }
 
 void genSigB(uint16 pWidth, bool debug) {
-  // code here
+  // Check for debug
+  uint16 widthTotal = pWidth;
+  if (debug) {
+    widthTotal *= DMOD;
+  }
+
+  // Generate pulse
+  digitalWrite(SIGB_PIN, HIGH);
+  delayMicroseconds(widthTotal);
+  digitalWrite(SIGB_PIN, LOW);
 }
 
 void loop() {
