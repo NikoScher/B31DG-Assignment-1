@@ -1,7 +1,7 @@
 /*
 *   wavegen.h
 *   
-*   Header file for assignment 1 for ESP-C3-M1-I-Kit
+*   Header file for assignment 1 for ESP32C3 Dev Module
 *   Nikolaus Scherwitzel (H00298068)
 *   Created: 12/02/23
 */
@@ -21,6 +21,7 @@
 #define PNUM   12   // h = 8: 8 + 4 pulses
 #define PBGAP  2500 // e = 5: 5 * 500us
 #define MODE   2    // r = 9: rem(9 / 4) + 1
+#define PITER  50   // BLAH
 
 #define SIGBWIDTH 50   // Width of pulse of Signal B in us
 #define DMOD      1000 // Debug modifier: Multiplies whole signal by constant
