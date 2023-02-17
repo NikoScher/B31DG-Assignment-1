@@ -1,14 +1,12 @@
 #include "wavegen.h"
 
 // Globals
-uint8 switch1;  // State of switch 1 for turning on/off pulse stream
-uint8 switch2;  // State of switch 2 for changing between 'normal' and 'modified' waveform
-uint8 debug;    // Debug state: Debug mode multiplies all signal lengths by DMOD (found in wavegen.h)
-uint8 mode;     // State to tell what waveform to generate ('normal' or 'modified')
+uint8 switchActive;  // State of switch for turning on/off pulse stream
+uint8 switchMode;    // State of switch for changing between 'normal' and 'modified' waveform
+uint8 mode;          // State to tell what waveform to generate ('normal' or 'modified')
 
 void setup() {
   Serial.begin(9600);
-  debug = 0;
 
   // Inputs
   pinMode(SWITCH1_PIN, INPUT);
@@ -19,65 +17,66 @@ void setup() {
   pinMode(SIGB_PIN, OUTPUT);
 }
 
-void genSigA(uint16 pWidth, uint16 pSpace, uint8 pNum, uint16 pbGap, uint8 mode, uint8 pIter, bool debug) {
+void genSigA(uint16 pWidth, uint16 pSpace, uint8 pNum, uint16 pbGap, uint8 mode, uint8 pIter) {
+  // Variables for controlling for loop
   int start;
   int end;
   int modifier;  
   switch (mode) {
-    case 0:
+    // Normal waveform
+    case 1:
       start = 0;
       end = pNum;
       modifier = 1;
       break;
+    // Generate inverted form of complete SigA waveform
     case 2:
       start = pNum - 1;
       end = -1;
       modifier = -1;
       break;
+    // Insert an extra 3 pulses into pulse block
+    case 3:
+      break;
+    // Half d and b time
+    case 4:
+      break;
   }
 
+  // Generate pulse stream
   for (int i = start; i != end; i += modifier){
     digitalWrite(SIGA_PIN, HIGH);
     delayMicroseconds((i * pIter) + pWidth);
     digitalWrite(SIGA_PIN, LOW);
     delayMicroseconds(pSpace);
   }
+  // Pulse train finished
   delayMicroseconds(pbGap);
 }
 
 void genSigB(uint16 pWidth, bool debug) {
-  // Check for debug
-  uint16 widthTotal = pWidth;
-  if (debug) {
-    widthTotal *= DMOD;
-  }
 
   // Generate pulse
   digitalWrite(SIGB_PIN, HIGH);
-  delayMicroseconds(widthTotal);
+  delayMicroseconds(pWidth);
   digitalWrite(SIGB_PIN, LOW);
 }
 
 void loop() {
   // Read input switches
-  switch1 = digitalRead(SWITCH1_PIN);
-  switch2 = digitalRead(SWITCH2_PIN);
+  switchActive = digitalRead(SWITCHACT_PIN);
+  switchMode = digitalRead(SWITCHMODE_PIN);
 
-  // If both switches on then use debug mode
-  if (switch1 && switch2) {
-    debug = 1;
-  }
-
-  // If switch 2 on, create 'modified' waveform, otherwise 'normal'
-  uint8 mode = 0;
-  if (switch2 == HIGH) {
+  // If mode switch on, create 'modified' waveform, otherwise 'normal'
+  uint8 mode = 1;
+  if (switchMode == HIGH) {
     mode = MODE;
   }
 
-  // Generate waveforms unless switch 1 is pressed
-  if (switch1 == LOW) {
-    genSigB(SIGBWIDTH, debug);
-    genSigA(PWIDTH, PSPACE, PNUM, PBGAP, mode, PITER, debug);
+  // Generate signal A & B unless on/off switch is pressed
+  if (switchActive == LOW) {
+    genSigB(SIGBWIDTH);
+    genSigA(PWIDTH, PSPACE, PNUM, PBGAP, mode, PITER);
   }
 
 }
