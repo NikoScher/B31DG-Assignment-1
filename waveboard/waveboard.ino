@@ -1,3 +1,11 @@
+/*
+*   waveboard.ino
+*   
+*   Sketch for assignment 1 for ESP32C3 Dev Module
+*   Nikolaus Scherwitzel (H00298068)
+*   Created: 12/02/23
+*/
+
 #include "wavegen.h"
 
 // Globals
@@ -9,8 +17,8 @@ void setup() {
   Serial.begin(9600);
 
   // Inputs
-  pinMode(SWITCH1_PIN, INPUT);
-  pinMode(SWITCH2_PIN, INPUT);
+  pinMode(SWITCHACT_PIN, INPUT);
+  pinMode(SWITCHMODE_PIN, INPUT);
 
   // Outputs
   pinMode(SIGA_PIN, OUTPUT);
