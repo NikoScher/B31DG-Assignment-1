@@ -62,7 +62,7 @@ void genSigA(uint16 pWidth, uint16 pSpace, uint8 pNum, uint16 pbGap, uint8 mode,
   delayMicroseconds(pbGap);
 }
 
-void genSigB(uint16 pWidth, bool debug) {
+void genSigB(uint16 pWidth) {
 
   // Generate pulse
   digitalWrite(SIGB_PIN, HIGH);
